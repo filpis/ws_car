@@ -1,0 +1,53 @@
+name: ws_car
+description: "Desafio técnico WS WORK!"
+
+publish_to: 'none' 
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+
+  cupertino_icons: ^1.0.2
+  flutter_modular: ^6.3.2
+  mobx: ^2.3.0+1
+  flutter_mobx: ^2.2.0+2
+  build_runner: ^2.4.8
+  flutter_svg: ^2.0.10+1
+  dio: ^5.4.1
+  mobx_codegen: ^2.6.0+1
+  sqflite: ^2.3.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/icons/
+    - assets/images/
+    - assets/
+
+  fonts:
+    - family: AlbertSans
+      fonts:
+        - asset: assets/fonts/AlbertSans-Light.ttf
+          weight: 300
+        - asset: assets/fonts/AlbertSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/AlbertSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/AlbertSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/AlbertSans-Bold.ttf
+          weight: 700
