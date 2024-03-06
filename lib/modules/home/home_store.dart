@@ -1,8 +1,8 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
-import 'package:ws_car/home/infra/car_model.dart';
-import 'package:ws_car/home/infra/home_repository.dart';
+import 'package:ws_car/modules/home/infra/car_model.dart';
+import 'package:ws_car/modules/home/infra/home_repository.dart';
 
 part 'home_store.g.dart';
 

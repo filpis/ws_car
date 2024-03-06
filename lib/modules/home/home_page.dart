@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:ws_car/home/home_store.dart';
+import 'package:ws_car/modules/home/home_store.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

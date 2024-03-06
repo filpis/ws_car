@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:ws_car/home/infra/car_model.dart';
+import 'package:ws_car/modules/home/infra/car_model.dart';
 
 abstract class HomeRepository {
   Future<List<CarModel>> getCars();
