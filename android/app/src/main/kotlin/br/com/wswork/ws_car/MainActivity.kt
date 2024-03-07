@@ -1,4 +1,4 @@
-package br.com.wswork.ws_car
+package br.com.wswork.wscars
 
 import io.flutter.embedding.android.FlutterActivity
 
