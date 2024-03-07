@@ -1,7 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mobx/mobx.dart';
 import 'package:ws_car/core/utils/constants.dart';
+import 'package:ws_car/modules/access/login/login_store.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,8 +16,26 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController user = TextEditingController();
-  TextEditingController password = TextEditingController();
+  final store = Modular.get<LoginStore>();
+  TextEditingController userController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  late ReactionDisposer react;
+
+  @override
+  void initState() {
+    super.initState();
+    reaction((_) => store.state, (LoginState state) {
+      if (state == LoginState.success) {
+        Modular.to.pushNamed("home");
+      } else if (state == LoginState.failed) {
+        print("Erro ao fazer login");
+        // Fluttertoast.showToast(
+        //   msg: "Erro ao fazer cadastro. Tente novamente mais tarde.",
+        //   backgroundColor: Colors.red,
+        // );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +82,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Expanded(
                     child: TextFormField(
-                      controller: user,
+                      style: const TextStyle(color: Colors.white),
+                      controller: userController,
                       decoration: const InputDecoration(
                         border: InputBorder.none,
                         labelText: "Usuário",
@@ -98,7 +122,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Expanded(
                     child: TextFormField(
-                      controller: password,
+                      style: const TextStyle(color: Colors.white),
+                      controller: passwordController,
                       decoration: const InputDecoration(
                         border: InputBorder.none,
                         labelText: "Senha",
@@ -113,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             TextButton(
               onPressed: () {
-                Modular.to.pushNamed("home");
+                store.login(userController.text, passwordController.text);
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -160,27 +185,39 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ],
             ),
-            TextButton(
-              onPressed: () {},
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: const Color(0xFF0c062b),
-                  border: Border.all(width: 1, color: Colors.white),
-                ),
-                width: MediaQuery.of(context).size.width,
-                height: 40,
-                child: const Center(
-                  child: Text(
-                    "Cadastro",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.white),
+            Observer(builder: (context) {
+              return TextButton(
+                onPressed: () {
+                  Modular.to.pushNamed("singup");
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: const Color(0xFF0c062b),
+                    border: Border.all(width: 1, color: Colors.white),
                   ),
+                  width: MediaQuery.of(context).size.width,
+                  height: 40,
+                  child: store.state == LoginState.loading
+                      ? const Center(
+                          child: SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(),
+                          ),
+                        )
+                      : const Center(
+                          child: Text(
+                            "Cadastro",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Colors.white),
+                          ),
+                        ),
                 ),
-              ),
-            )
+              );
+            })
           ],
         ),
       ),
