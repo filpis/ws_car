@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:ws_car/core/utils/local_storage/local_storage.dart';
 import 'package:ws_car/modules/home/infra/car_model.dart';
 
 class ProductPage extends StatefulWidget {
@@ -9,19 +10,10 @@ class ProductPage extends StatefulWidget {
   @override
   State<ProductPage> createState() => _ProductPageState();
 }
-//  {
 
-//          "id": 1,
-//          "timestamp_cadastro" : 1696539488,
-//          "modelo_id" : 18,
-//          "ano": 2015,
-//          "combustivel" : "FLEX",
-//          "num_portas" : 4,
-//          "cor": "BEGE",
-//          "nome_modelo" : "ONIX PLUS",
-//          "valor" : 50.000
-//         },
 class _ProductPageState extends State<ProductPage> {
+  LocalStorage ls = LocalStorage.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,7 +130,9 @@ class _ProductPageState extends State<ProductPage> {
             const Spacer(),
             Observer(builder: (context) {
               return TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  ls.saveBuy(widget.car);
+                },
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -149,7 +143,7 @@ class _ProductPageState extends State<ProductPage> {
                   height: 50,
                   child: const Center(
                     child: Text(
-                      "Quero garantir!",
+                      "Eu quero!",
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,

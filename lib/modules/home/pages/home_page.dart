@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:ws_car/core/tasks_monitoring/tasks_monitoring.dart';
 import 'package:ws_car/core/utils/local_storage/local_storage.dart';
@@ -19,12 +20,18 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final store = Modular.get<HomeStore>();
+  LocalStorage database = LocalStorage();
 
   @override
   void initState() {
     super.initState();
 
     store.getCars();
+    _init();
+  }
+
+  _init() async {
+    await LocalStorage.instance.initDb();
   }
 
   @override

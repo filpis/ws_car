@@ -7,14 +7,14 @@ class LocalStorage {
 
   factory LocalStorage() => instance;
 
-  late Database _db;
+  Database? _db;
 
   LocalStorage.internal();
 
   Future<Database> get db async {
-    if (_db != null) return _db;
+    if (_db != null) return _db!;
     _db = await initDb();
-    return _db;
+    return _db!;
   }
 
   Future<Database> initDb() async {

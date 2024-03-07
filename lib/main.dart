@@ -1,8 +1,13 @@
+import 'dart:developer';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:uuid/uuid.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:ws_car/core/utils/local_storage/local_storage.dart';
+import 'package:ws_car/modules/home/infra/car_model.dart';
 import 'app_module.dart';
 import 'app_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,12 +20,35 @@ void callbackDispatcher() {
     switch (task) {
       case "sendBuyCar":
         logTaskStart(taskId);
+        LocalStorage ls = LocalStorage.instance;
+        List<CarModel> carros = await ls.getBuy();
+        if (carros.isNotEmpty) {
+          await enviarDados(carros);
+        } else {
+          log("Nenhum dado para enviar");
+        }
         logTaskComplete(taskId);
         break;
     }
 
     return Future.value(true);
   });
+}
+
+Future<void> enviarDados(List<CarModel> carros) async {
+  Dio dio = Dio();
+
+  for (var carro in carros) {
+    var response = await dio.post(
+      "",
+    );
+
+    if (response.statusCode == 200) {
+      log("Dados enviados com sucesso: $carro");
+    } else {
+      log("Falha ao enviar dados: $response");
+    }
+  }
 }
 
 void main() async {
