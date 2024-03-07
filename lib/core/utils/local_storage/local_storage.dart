@@ -3,9 +3,9 @@ import 'package:sqflite/sqflite.dart';
 import 'package:ws_car/modules/home/infra/car_model.dart';
 
 class LocalStorage {
-  static final LocalStorage _instance = LocalStorage.internal();
+  static final LocalStorage instance = LocalStorage.internal();
 
-  factory LocalStorage() => _instance;
+  factory LocalStorage() => instance;
 
   late Database _db;
 

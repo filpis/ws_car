@@ -25,6 +25,13 @@ dependencies:
   firebase_core: ^2.24.2
   firebase_auth: ^4.16.0
   path: ^1.9.0
+  flutter_launcher_icons: ^0.13.1
+  workmanager: ^0.5.2
+  cloud_firestore: ^4.14.0
+  firebase_database: ^10.4.0
+  uuid: ^4.3.3
+  fluttertoast: ^8.2.4
+  
 
 dev_dependencies:
   flutter_test:
@@ -54,3 +61,12 @@ flutter:
           weight: 600
         - asset: assets/fonts/AlbertSans-Bold.ttf
           weight: 700
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path_ios: "app_icons/app_icon_square.png"
+  image_path_android: "app_icons/app_icon_square.png"
+  adaptive_icon_background: "app_icons/app_icon_android_background.png"
+  adaptive_icon_foreground: "app_icons/app_icon_android_foreground.png"
+  remove_alpha_ios: true
