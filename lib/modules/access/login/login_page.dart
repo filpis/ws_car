@@ -3,7 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobx/mobx.dart';
 import 'package:ws_car/core/utils/constants.dart';
 import 'package:ws_car/modules/access/login/login_store.dart';
@@ -28,11 +30,10 @@ class _LoginPageState extends State<LoginPage> {
       if (state == LoginState.success) {
         Modular.to.pushNamed("home");
       } else if (state == LoginState.failed) {
-        print("Erro ao fazer login");
-        // Fluttertoast.showToast(
-        //   msg: "Erro ao fazer cadastro. Tente novamente mais tarde.",
-        //   backgroundColor: Colors.red,
-        // );
+        Fluttertoast.showToast(
+          msg: "Conta não encontrada. Faça seu cadastro.",
+          backgroundColor: Colors.red,
+        );
       }
     });
   }
@@ -44,14 +45,14 @@ class _LoginPageState extends State<LoginPage> {
         color: const Color(0xFF160e3b),
         child: ListView(
           children: [
-            const SizedBox(
-              height: 20,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.2,
             ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                "${Assets.images}/ws_logo.png",
-              ),
+            SvgPicture.asset(
+              "${Assets.images}/ws_logo.svg",
+              width: 200,
+              height: 200,
+              fit: BoxFit.contain,
             ),
             const SizedBox(
               height: 20,
@@ -136,29 +137,40 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(
               height: 10,
             ),
-            TextButton(
-              onPressed: () {
-                store.login(userController.text, passwordController.text);
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: const Color(0xFF0c062b),
-                  border: Border.all(width: 1, color: Colors.white),
-                ),
-                width: MediaQuery.of(context).size.width,
-                height: 40,
-                child: const Center(
-                  child: Text(
-                    "Entrar",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.white),
-                  ),
-                ),
-              ),
-            ),
+            Observer(builder: (context) {
+              return TextButton(
+                onPressed: () {
+                  store.login(userController.text, passwordController.text);
+                },
+                child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xFF0c062b),
+                      border: Border.all(width: 1, color: Colors.white),
+                    ),
+                    width: MediaQuery.of(context).size.width,
+                    height: 40,
+                    child: Center(
+                      child: store.state == LoginState.loading
+                          ? const Center(
+                              child: SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(),
+                              ),
+                            )
+                          : const Center(
+                              child: Text(
+                                "Entrar",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    color: Colors.white),
+                              ),
+                            ),
+                    )),
+              );
+            }),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -198,23 +210,15 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   width: MediaQuery.of(context).size.width,
                   height: 40,
-                  child: store.state == LoginState.loading
-                      ? const Center(
-                          child: SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(),
-                          ),
-                        )
-                      : const Center(
-                          child: Text(
-                            "Cadastro",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                                color: Colors.white),
-                          ),
-                        ),
+                  child: const Center(
+                    child: Text(
+                      "Cadastro",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.white),
+                    ),
+                  ),
                 ),
               );
             })

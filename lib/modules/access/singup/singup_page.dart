@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobx/mobx.dart';
 import 'package:ws_car/core/utils/constants.dart';
 import 'package:ws_car/modules/access/singup/singup_store.dart';
@@ -27,16 +26,16 @@ class _SingupPageState extends State<SingupPage> {
     super.initState();
     reaction((_) => store.state, (SingupState state) {
       if (state == SingupState.success) {
-        // Fluttertoast.showToast(
-        //   msg: "Cadastro feito com sucesso!",
-        //   backgroundColor: Colors.green,
-        // );
+        Fluttertoast.showToast(
+          msg: "Cadastro feito com sucesso!",
+          backgroundColor: Colors.green,
+        );
         Modular.to.pop();
       } else if (state == SingupState.failed) {
-        // Fluttertoast.showToast(
-        //       msg: "Erro ao fazer cadastro. Tente novamente mais tarde.",
-        //       backgroundColor: Colors.red,
-        //     );
+        Fluttertoast.showToast(
+          msg: "Erro ao fazer cadastro. Tente novamente mais tarde.",
+          backgroundColor: Colors.red,
+        );
       }
     });
   }
