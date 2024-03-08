@@ -55,15 +55,15 @@ class SavedCarModel {
 
   SavedCarModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    timestampCadastro = json['timestamp_cadastro'] != null
-        ? DateTime.fromMillisecondsSinceEpoch(json['timestamp_cadastro'])
+    timestampCadastro = json['timestampCadastro'] != null
+        ? DateTime.fromMillisecondsSinceEpoch(json['timestampCadastro'])
         : null;
-    modeloId = json['modelo_id'];
+    modeloId = json['modeloId'];
     ano = json['ano'];
     combustivel = json['combustivel'];
-    numPortas = json['num_portas'];
+    numPortas = json['numPortas'];
     cor = json['cor'];
-    nomeModelo = json['nome_modelo'];
+    nomeModelo = json['nomeModelo'];
     valor = json['valor'] is double
         ? json['valor']
         : double.tryParse(json['valor'].toString());
