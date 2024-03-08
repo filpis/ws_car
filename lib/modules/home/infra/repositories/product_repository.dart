@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:ws_car/modules/home/infra/car_model.dart';
+import 'package:ws_car/modules/home/infra/models/car_model.dart';
 
-abstract class HomeRepository {
+abstract class ProductRepository {
   Future<List<CarModel>> getCars();
 }
 
-class HomeRepositoryImpl implements HomeRepository {
+class ProductRepositoryImpl implements ProductRepository {
   final dio = Dio();
 
   @override

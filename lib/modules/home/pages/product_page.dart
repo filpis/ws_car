@@ -1,8 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:ws_car/core/utils/local_storage/local_storage.dart';
-import 'package:ws_car/modules/home/infra/car_model.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ws_car/core/utils/constants.dart';
+import 'package:ws_car/core/local_storage/local_storage.dart';
+import 'package:ws_car/modules/home/infra/models/car_model.dart';
+import 'package:ws_car/modules/home/infra/models/saved_car_model.dart';
 
 class ProductPage extends StatefulWidget {
   const ProductPage({super.key, required this.car});
@@ -12,7 +16,8 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-  LocalStorage ls = LocalStorage.instance;
+  LocalStorage localStorage = LocalStorage.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +35,6 @@ class _ProductPageState extends State<ProductPage> {
         backgroundColor: const Color(0xFF160e3b),
       ),
       body: Container(
-        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
@@ -46,92 +50,125 @@ class _ProductPageState extends State<ProductPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: Image.network(
-                "https://www.tudodesenhos.com/uploads/images/2939/carro-de-4-portas.jpg",
-                height: 250,
+            Expanded(
+              child: Image.asset(
+                "${Assets.cars}/${widget.car.nomeModelo}.png",
+                width: MediaQuery.of(context).size.width,
+                fit: BoxFit.cover,
               ),
             ),
-            Row(
-              children: [
-                const Text(
-                  "Modelo: ",
-                  style: TextStyle(fontWeight: FontWeight.w200, fontSize: 18),
-                ),
-                Text(
-                  widget.car.nomeModelo ?? "",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: [
-                const Text(
-                  "Combustível: ",
-                  style: TextStyle(fontWeight: FontWeight.w200, fontSize: 18),
-                ),
-                Text(
-                  widget.car.combustivel ?? "",
-                  style: const TextStyle(fontSize: 18),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: [
-                const Text(
-                  "Quantidade de portas: ",
-                  style: TextStyle(fontWeight: FontWeight.w200, fontSize: 18),
-                ),
-                const SizedBox(
-                  width: 2,
-                ),
-                Text(
-                  widget.car.numPortas.toString(),
-                  style: const TextStyle(fontSize: 18),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: [
-                Text(
-                  "Cor: ${widget.car.cor}",
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w200,
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      const Text(
+                        "Modelo: ",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w200, fontSize: 18),
+                      ),
+                      Text(
+                        widget.car.nomeModelo ?? "",
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: [
-                const Text(
-                  "Valor: ",
-                  style: TextStyle(fontWeight: FontWeight.w200, fontSize: 18),
-                ),
-                Text(
-                  formatarValorReal(widget.car.valor),
-                  style: const TextStyle(fontSize: 18),
-                ),
-              ],
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      const Text(
+                        "Combustível: ",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w200, fontSize: 18),
+                      ),
+                      Text(
+                        widget.car.combustivel ?? "",
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      const Text(
+                        "Quantidade de portas: ",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w200, fontSize: 18),
+                      ),
+                      const SizedBox(
+                        width: 2,
+                      ),
+                      Text(
+                        widget.car.numPortas.toString(),
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "Cor: ${widget.car.cor}",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w200,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      const Text(
+                        "Valor: ",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w200, fontSize: 18),
+                      ),
+                      Text(
+                        formatarValorReal(widget.car.valor),
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
             const Spacer(),
             Observer(builder: (context) {
               return TextButton(
-                onPressed: () {
-                  ls.saveBuy(widget.car);
+                onPressed: () async {
+                  await localStorage.saveBuy(SaveBuyModel(
+                    cars: [
+                      SavedCarModel(
+                        ano: widget.car.ano,
+                        date: DateTime.now(),
+                        numPortas: widget.car.numPortas,
+                        modeloId: widget.car.id,
+                        nomeModelo: widget.car.nomeModelo,
+                        email: _auth.currentUser?.email,
+                        valor: widget.car.valor,
+                        timestampCadastro: DateTime.fromMillisecondsSinceEpoch(
+                            widget.car.timestampCadastro!),
+                        id: widget.car.id,
+                        combustivel: widget.car.combustivel,
+                        cor: widget.car.cor,
+                      )
+                    ],
+                  ));
+                  Fluttertoast.showToast(
+                    msg: "Pedido feito!",
+                    backgroundColor: Colors.green,
+                  );
                 },
                 child: Container(
                   decoration: BoxDecoration(

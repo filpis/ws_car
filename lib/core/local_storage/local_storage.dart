@@ -1,6 +1,6 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:ws_car/modules/home/infra/car_model.dart';
+import 'package:ws_car/modules/home/infra/models/saved_car_model.dart';
 
 class LocalStorage {
   static final LocalStorage instance = LocalStorage.internal();
@@ -26,29 +26,46 @@ class LocalStorage {
 
   void _onCreate(Database db, int newVersion) async {
     await db.execute('''
-      CREATE TABLE Buy
-      (
-        id INTEGER PRIMARY KEY,
-        name TEXT,
-        age INTEGER
-      )
-      ''');
+    CREATE TABLE Buy
+    (
+      id INTEGER PRIMARY KEY,
+      timestampCadastro INTEGER,
+      modeloId INTEGER,
+      ano INTEGER,
+      combustivel TEXT,
+      numPortas INTEGER,
+      cor TEXT,
+      nomeModelo TEXT,
+      valor REAL,
+      date INTEGER,
+      email TEXT
+    )
+    ''');
   }
 
-  Future<int> saveBuy(CarModel car) async {
+  Future<void> saveBuy(SaveBuyModel buys) async {
     var dbClient = await db;
-    int res = await dbClient.insert("Buy", car.toJson());
-    return res;
+    for (var car in buys.cars) {
+      await dbClient.insert(
+        "Buy",
+        car.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    }
+
+    return;
   }
 
-  Future<List<CarModel>> getBuy() async {
+  Future<SaveBuyModel?> getBuy() async {
     var dbClient = await db;
     List<Map<String, dynamic>> list =
         await dbClient.rawQuery('SELECT * FROM Buy');
-    List<CarModel> people = [];
+    SaveBuyModel data = SaveBuyModel(cars: []);
+
     for (int i = 0; i < list.length; i++) {
-      people.add(CarModel.fromJson(list[i]));
+      data.cars.add(SavedCarModel.fromJson(list[i]));
     }
-    return people;
+
+    return data.cars.isNotEmpty ? data : null;
   }
 }

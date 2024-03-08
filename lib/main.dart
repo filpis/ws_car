@@ -6,12 +6,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:uuid/uuid.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:ws_car/core/utils/local_storage/local_storage.dart';
-import 'package:ws_car/modules/home/infra/car_model.dart';
+import 'package:ws_car/core/local_storage/local_storage.dart';
+import 'package:ws_car/modules/home/infra/models/saved_car_model.dart';
 import 'app_module.dart';
 import 'app_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+//TODO: add componentization
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     await Firebase.initializeApp();
@@ -21,9 +22,9 @@ void callbackDispatcher() {
       case "sendBuyCar":
         logTaskStart(taskId);
         LocalStorage ls = LocalStorage.instance;
-        List<CarModel> carros = await ls.getBuy();
-        if (carros.isNotEmpty) {
-          await enviarDados(carros);
+        SaveBuyModel? buys = await ls.getBuy();
+        if (buys != null && buys.cars.isNotEmpty) {
+          await postData(buys);
         } else {
           log("Nenhum dado para enviar");
         }
@@ -35,18 +36,19 @@ void callbackDispatcher() {
   });
 }
 
-Future<void> enviarDados(List<CarModel> carros) async {
+Future<void> postData(SaveBuyModel cars) async {
   Dio dio = Dio();
 
-  for (var carro in carros) {
-    var response = await dio.post(
-      "",
+  for (var carro in cars.cars) {
+    var result = await dio.post(
+      "https://www.wswork.com.br/cars/leads",
+      data: cars.toMap(),
     );
 
-    if (response.statusCode == 200) {
+    if (result.statusCode == 200) {
       log("Dados enviados com sucesso: $carro");
     } else {
-      log("Falha ao enviar dados: $response");
+      log("Falha ao enviar dados: $result");
     }
   }
 }
@@ -84,7 +86,7 @@ void logTaskStart(String taskId) {
 }
 
 void logTaskComplete(String taskId) {
-  FirebaseFirestore.instance.collection('taskLogs').doc(taskId).update({
+  FirebaseFirestore.instance.collection('taskLogs').doc(taskId).set({
     'status': 'completed',
     'endTime': FieldValue.serverTimestamp(),
   });

@@ -46,7 +46,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
-    - assets/
+    - assets/cars/
 
   fonts:
     - family: AlbertSans

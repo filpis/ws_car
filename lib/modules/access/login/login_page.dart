@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -28,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     reaction((_) => store.state, (LoginState state) {
       if (state == LoginState.success) {
-        Modular.to.pushNamed("home");
+        Modular.to.pushNamed("../home");
       } else if (state == LoginState.failed) {
         Fluttertoast.showToast(
           msg: "Conta não encontrada. Faça seu cadastro.",
@@ -58,170 +56,182 @@ class _LoginPageState extends State<LoginPage> {
               height: 20,
             ),
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              width: MediaQuery.of(context).size.width,
-              height: 40,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: const Color(0xFFA4A4A4),
-                  width: 0.5,
-                ),
-              ),
-              child: Row(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
                 children: [
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  SvgPicture.asset(
-                    "${Assets.icons}/user_icon.svg",
-                    fit: BoxFit.fill,
-                    width: 15,
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Expanded(
-                    child: TextFormField(
-                      style: const TextStyle(color: Colors.white),
-                      controller: userController,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        labelText: "Usuário",
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              height: 40,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: const Color(0xFFA4A4A4),
-                  width: 0.5,
-                ),
-              ),
-              child: Row(
-                children: [
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  SvgPicture.asset(
-                    "${Assets.icons}/key_icon.svg",
-                    fit: BoxFit.fill,
-                    width: 15,
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Expanded(
-                    child: TextFormField(
-                      style: const TextStyle(color: Colors.white),
-                      controller: passwordController,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        labelText: "Senha",
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Observer(builder: (context) {
-              return TextButton(
-                onPressed: () {
-                  store.login(userController.text, passwordController.text);
-                },
-                child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: const Color(0xFF0c062b),
-                      border: Border.all(width: 1, color: Colors.white),
-                    ),
+                  Container(
                     width: MediaQuery.of(context).size.width,
                     height: 40,
-                    child: Center(
-                      child: store.state == LoginState.loading
-                          ? const Center(
-                              child: SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(),
-                              ),
-                            )
-                          : const Center(
-                              child: Text(
-                                "Entrar",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    color: Colors.white),
-                              ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: const Color(0xFFA4A4A4),
+                        width: 0.5,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        SvgPicture.asset(
+                          "${Assets.icons}/user_icon.svg",
+                          fit: BoxFit.fill,
+                          width: 15,
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Expanded(
+                          child: TextFormField(
+                            style: const TextStyle(color: Colors.white),
+                            controller: userController,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              labelText: "Usuário",
                             ),
-                    )),
-              );
-            }),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: 30,
-                  height: 0.5,
-                  color: Colors.white,
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                const Text(
-                  "ou",
-                  style: TextStyle(color: Colors.white, fontSize: 14),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Container(
-                  width: 30,
-                  height: 0.5,
-                  color: Colors.white,
-                ),
-              ],
-            ),
-            Observer(builder: (context) {
-              return TextButton(
-                onPressed: () {
-                  Modular.to.pushNamed("singup");
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: const Color(0xFF0c062b),
-                    border: Border.all(width: 1, color: Colors.white),
-                  ),
-                  width: MediaQuery.of(context).size.width,
-                  height: 40,
-                  child: const Center(
-                    child: Text(
-                      "Cadastro",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.white),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              );
-            })
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: const Color(0xFFA4A4A4),
+                        width: 0.5,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        SvgPicture.asset(
+                          "${Assets.icons}/key_icon.svg",
+                          fit: BoxFit.fill,
+                          width: 15,
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Expanded(
+                          child: TextFormField(
+                            style: const TextStyle(color: Colors.white),
+                            controller: passwordController,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              labelText: "Senha",
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Observer(builder: (context) {
+                    return GestureDetector(
+                      onTap: () {
+                        store.login(
+                            userController.text, passwordController.text);
+                      },
+                      child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: const Color(0xFF0c062b),
+                            border: Border.all(width: 1, color: Colors.white),
+                          ),
+                          width: MediaQuery.of(context).size.width,
+                          height: 40,
+                          child: Center(
+                            child: store.state == LoginState.loading
+                                ? const Center(
+                                    child: SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  )
+                                : const Center(
+                                    child: Text(
+                                      "Entrar",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                          )),
+                    );
+                  }),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 30,
+                        height: 0.5,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      const Text(
+                        "ou",
+                        style: TextStyle(color: Colors.white, fontSize: 14),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Container(
+                        width: 30,
+                        height: 0.5,
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Observer(builder: (context) {
+                    return GestureDetector(
+                      onTap: () {
+                        Modular.to.pushNamed("singup");
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: const Color(0xFF0c062b),
+                          border: Border.all(width: 1, color: Colors.white),
+                        ),
+                        width: MediaQuery.of(context).size.width,
+                        height: 40,
+                        child: const Center(
+                          child: Text(
+                            "Cadastro",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    );
+                  })
+                ],
+              ),
+            )
           ],
         ),
       ),

@@ -33,16 +33,16 @@ class CarModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['timestamp_cadastro'] = this.timestampCadastro;
-    data['modelo_id'] = this.modeloId;
-    data['ano'] = this.ano;
-    data['combustivel'] = this.combustivel;
-    data['num_portas'] = this.numPortas;
-    data['cor'] = this.cor;
-    data['nome_modelo'] = this.nomeModelo;
-    data['valor'] = this.valor;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['timestamp_cadastro'] = timestampCadastro;
+    data['modelo_id'] = modeloId;
+    data['ano'] = ano;
+    data['combustivel'] = combustivel;
+    data['num_portas'] = numPortas;
+    data['cor'] = cor;
+    data['nome_modelo'] = nomeModelo;
+    data['valor'] = valor;
     return data;
   }
 }
