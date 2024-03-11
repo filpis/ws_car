@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mobx/mobx.dart';
 import 'package:ws_car/core/utils/constants.dart';
 import 'package:ws_car/core/local_storage/local_storage.dart';
 import 'package:ws_car/modules/home/infra/models/car_model.dart';
 import 'package:ws_car/modules/home/infra/models/saved_car_model.dart';
+import 'package:ws_car/modules/home/pages/product_store.dart';
 
 class ProductPage extends StatefulWidget {
   const ProductPage({super.key, required this.car});
@@ -17,7 +19,26 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
   LocalStorage localStorage = LocalStorage.instance;
+  final store = Modular.get<ProductStore>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  late final ReactionDisposer react;
+  @override
+  void initState() {
+    super.initState();
+    react = reaction((state) => store.state, (ProducBuyState state) {
+      if (state == ProducBuyState.success) {
+        Fluttertoast.showToast(
+          msg: "Pedido feito!",
+          backgroundColor: Colors.green,
+        );
+      } else if (state == ProducBuyState.failed) {
+        Fluttertoast.showToast(
+          msg: "Erro ao processar pedido.\nTente novamente mais tarde!",
+          backgroundColor: Colors.red,
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,9 +166,10 @@ class _ProductPageState extends State<ProductPage> {
             ),
             const Spacer(),
             Observer(builder: (context) {
+              //TODO: componentize this widget
               return TextButton(
                 onPressed: () async {
-                  await localStorage.saveBuy(SaveBuyModel(
+                  await store.buy(SaveBuyModel(
                     cars: [
                       SavedCarModel(
                         ano: widget.car.ano,
@@ -165,10 +187,6 @@ class _ProductPageState extends State<ProductPage> {
                       )
                     ],
                   ));
-                  Fluttertoast.showToast(
-                    msg: "Pedido feito!",
-                    backgroundColor: Colors.green,
-                  );
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -178,14 +196,22 @@ class _ProductPageState extends State<ProductPage> {
                   ),
                   width: MediaQuery.of(context).size.width,
                   height: 50,
-                  child: const Center(
-                    child: Text(
-                      "Eu quero!",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.white),
-                    ),
+                  child: Center(
+                    child: store.state == ProducBuyState.loading
+                        ? const SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Text(
+                            "Eu quero!",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Colors.white),
+                          ),
                   ),
                 ),
               );
