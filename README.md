@@ -37,7 +37,7 @@ O projeto segue o padrão de arquitetura MVC, onde as responsabilidades são dis
 
 ## Melhorias Pendentes
 - Criação de testes de integração e unitários.
-- Implementação de Envs para diferenciar ambientes de desenvolvimento.
+- Implementação de Envs para diferenciar ambientes de desenvolvimento e proteger dados sensíveis como keys, por exemplo.
 - Adição de validadores globais de inputs.
 - Criação de classes para conter as Cores da Aplicação e caminhos de assets.
 - Implementação de um RestClient para centralizar requisições HTTP.
