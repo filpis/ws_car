@@ -32,7 +32,6 @@ O projeto segue o padrão de arquitetura MVC, onde as responsabilidades são dis
 
 ## Estado Atual do Projeto
 - Desenvolvimento baseado em conceitos de Arquitetura Limpa e Código Limpo.
-- Interface inspirada no site da WS Work.
 - Refatoração em andamento para melhorias.
 
 ## Melhorias Pendentes
@@ -44,5 +43,4 @@ O projeto segue o padrão de arquitetura MVC, onde as responsabilidades são dis
 
 ## Conclusão
 O projeto WS Cars apresenta funcionalidades implementadas e está em constante evolução.
-Lembrando que a aplicação necessita de uma refatoração (Que está acontecendo no mesmo momento que escrevo essa mensagem).
 
